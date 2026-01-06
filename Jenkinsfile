@@ -29,18 +29,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // Use sudo in case Jenkins user doesn't have Docker permission
-                sh '''
-                    sudo docker build -t $IMAGE_NAME .
-                '''
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                sh '''
-                    sudo docker push $IMAGE_NAME
-                '''
+                sh 'docker push $IMAGE_NAME'
             }
         }
 
