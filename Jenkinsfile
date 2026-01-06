@@ -20,20 +20,27 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    sh '''
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    '''
                 }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t akshatha28/mywebsite:latest .'
+                // Use sudo in case Jenkins user doesn't have Docker permission
+                sh '''
+                    sudo docker build -t $IMAGE_NAME .
+                '''
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                sh 'docker push akshatha28/mywebsite:latest'
+                sh '''
+                    sudo docker push $IMAGE_NAME
+                '''
             }
         }
 
